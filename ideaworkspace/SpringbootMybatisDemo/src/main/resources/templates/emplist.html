@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../jquery.min.js"></script>
+    <script>
+        $(function () {
+            //alert(111);
+            $.ajax({
+                url : "/sb/emp/list",
+                type : "POST",
+                dataType : "json",
+                success : function(data) {
+                    //  alert("修改成功!");
+                    if(data!=''){
+                        var str="";
+                        for (var i=0;i<data.length;i++){
+                            str+="<tr><td>"+data[i].mgrName+"</td>" +
+                                "<td>"+data[i].deptName+"</td>"+
+                                "<td><img width=\"100px;\" height=\"100px;\" src=\"/sb/emp/show?fileName="+data[i].picPath+"\"></td>"
+                                +" </tr>";
+                        }
+                        $("#tby").append(str);
+                    }
+                    //location.href = "/user/showAllUser";
+                }
+            });
+        })
+    </script>
+</head>
+<body>
+<a></a>
+<table>
+
+    <thead><tr><td>领导姓名</td><td>部门名称</td><td>员工图片</td>  </tr> </thead>
+    <tbody id="tby"></tbody>
+</table>
+</body>
+</html>

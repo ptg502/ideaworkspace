@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.sm.dao.EmpDao">
+    <!--查询列表-->
+    <select id="getList" resultType="emp">
+        select picpath,empno,ename,job,sal as salary,comm,to_char(hiredate,'yyyy-mm-dd') as hireDate,
+        (select ename from emp b where b.empno=a.mgr)  as mgrName,(select dname from dept where deptno=a.deptno) as deptName
+        from emp a
+        <where>
+            <if test="ename!=null and ename!=''">
+                   and ename like '%'||#{ename}||'%'
+            </if>
+        </where>
+        order by ${sort} ${order} <!--${}取值，原封不动的取出数据，相当于占位符 可以进行 sql注入  #{} 防止sql注入-->
+    </select>
+    <!-- 调用存储过程，根据部门编号获取人员列表-->
+     <select id="getProListByDeptNo" parameterType="map" statementType="CALLABLE">
+        call pkg_emp.pro_query_emp_bydeptno(#{deptNo,jdbcType=INTEGER,mode=IN},#{csrEmp,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet,resultMap=empResult})
+     </select>
+    <!--结果映射-->
+    <resultMap id="empResult" type="emp">
+        <id column="empno" property="empNo"></id>
+        <result column="ename" property="ename"></result>
+        <result column="job" property="job"></result>
+        <result column="sal" property="salary"></result>
+        <result column="hiredate" property="hireDate"></result>
+        <result column="comm" property="comm"></result>
+    </resultMap>
+    <!--添加-->
+    <insert id="add">
+        insert into emp(empno,picpath,deptno,mgr) values(seq_emp_id.nextval,#{picPath},20,7698)
+    </insert>
+</mapper>

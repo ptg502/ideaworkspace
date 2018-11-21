@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SpringbootMybatisDemo:war">
+    <output-path>$PROJECT_DIR$/../ideaworkspace/SpringbootMybatisDemo/target</output-path>
+    <root id="archive" name="SpringbootMybatisDemo.war">
+      <element id="artifact" artifact-name="SpringbootMybatisDemo:war exploded" />
+    </root>
+  </artifact>
+</component>

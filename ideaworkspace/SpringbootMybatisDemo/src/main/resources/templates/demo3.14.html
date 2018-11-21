@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>vue demo</title>
+		<script src="../vue.js"></script>
+		<script src="../vue-resource.js"></script>
+
+	</head>
+	<body>
+		
+		<ul id="diva" >
+				<form v-on:submit.prevent="addPs">
+					<label>姓名</label><input v-model="name" placeholder="请输入姓名"/><br>
+					<label>邮箱</label><input v-model="email"  placeholder="请输入邮箱"/><br>
+					<button>添加</button>
+				</form>
+				
+		       <li is="sgrw" v-for="(item,index) in items" v-bind:rw="item" v-bind:key="item.id" v-on:remove="items.splice(index,1)"></li>
+		</ul>
+		<script>
+		 Vue.component("sgrw",{
+			 props:["rw"],
+			 template:'<li>{{rw.ename}}-{{rw.job}} <button v-on:click="$emit(\'remove\')">删除</button></li>'
+		 })
+		 var vm = new Vue({
+			 el:"#diva",
+			 data:{
+				 name:'',
+				 email:'',
+				 items:[{empNo:1,ename:"诸葛亮",job:"zhuge@163.com"},
+				 {empNo:2,ename:"张飞",job:"zhangfei@163.com"},
+				 {empNo:3,ename:"刘备",job:"liubei@163.com"}]
+			 } ,
+             created: function() {
+                 this.getList();
+             },
+			 methods:{
+				 //添加方法
+				 addPs:function(){
+					 this.items.push({id:Math.floor(Math.random()*10000),name:this.name,email:this.email})
+				 },
+				 getList:function(){
+                     var url="/sb/emp/list";
+                     //ajax获取数据
+                     this.$http.get(url).then(function(result){
+                         var json = result.bodyText;
+                         // alert(json);
+                         console.log(json);
+                         //需要json2.js
+                         this.items = JSON.parse(json);
+                         //也可以，有些浏览器不支持
+                         //console.log(this.users[0].deptNo);
+                     },function(response){
+                         console.log(response)
+                     })
+				 }
+
+
+			 }
+		 })
+		</script>
+	</body>
+</html>
